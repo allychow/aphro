@@ -58,6 +58,38 @@ var request = require('request'); // "Request" library
      }));
  });
 
+var token1 = '';
+
+ app.get('/songs', function(req, res) {
+
+  var state = generateRandomString(16);
+  res.cookie(stateKey, state);
+
+  token1 = 'BQC-W73i9Wjli1s1jKiYrgPFZFAMw4aeoAySEasbxFPqiHQzvf1xGeJ6GY_tvf8csphCXt4qjgRen9crGpjBxhBECJEqG5PwYesr6J_-9nkoQP4aQnrhEN1eG1p3uYCYa7W7xvnEuVgSk_2IUdEkQwTPeFpq-6oIRqH2A8dOY6-7Iek1sZNxhC5fhKTTu3H_UYBDAwLSfLZn_ESxKWyDidDTMQqOEB9aJn9qYr0QVfMpD9Xcqy2lrzDYa123dWZQG5UwboBS6HI4a5yn1mCzG7aRctKOzJSRjX6PiMRHVek3GXnd3ua0u11_gkoK26v1c-LorA';
+  //console.log(token1);
+
+   // your application requests authorization
+   var scope = 'user-library-read';
+   var options = {
+    url:'https://api.spotify.com/v1/me/tracks',
+    headers:{
+      'Authorization': 'Bearer ' + token1,
+      'response_type': 'code',
+      'client_id': client_id,
+      'scope': scope,
+      'state': state
+    },
+    json:true
+   };
+
+   request.get(options, function(error, req, body) {
+     console.log(body);
+     res.send(body);
+   });
+
+ });
+
+
  app.get('/callback', function(req, res) {
 
    // your application requests refresh and access tokens
@@ -102,6 +134,8 @@ var request = require('request'); // "Request" library
          // use the access token to access the Spotify Web API
          request.get(options, function(error, response, body) {
            console.log(body);
+           token1 = access_token;
+           console.log(token1);
          });
 
          // we can also pass the token to the browser to make requests from there
