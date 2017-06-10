@@ -4,4 +4,7 @@ module.exports = function(app) {
     res.render('index.html');
   });
 
+  app.get('/match', function(req, res) {
+    res.render('match.html');
+  });
 }
